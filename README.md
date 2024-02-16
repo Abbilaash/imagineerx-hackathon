@@ -1,1 +1,1 @@
-ImagineerX Hackathon
+ImagineerX - Hackathon
