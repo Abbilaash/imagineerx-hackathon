@@ -1,1 +1,0 @@
-The src directory is used to dump all the codes and components
