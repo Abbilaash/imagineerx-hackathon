@@ -1,4 +1,3 @@
-# Importing all needed modules
 import customtkinter
 import tkinter as tk
 from tkinter import *
@@ -121,14 +120,14 @@ def App():
                 graph_frame.grid_rowconfigure(0, weight=1)
                 graph_frame.grid_columnconfigure(0, weight=1)
             graph_plot()
-            
 
             # creating a frame for suggesting the user for more trades
-            suggest_frame = customtkinter.CTkFrame(master=home_frame,width=600,height=300,fg_color="gray90")
-            suggest_frame.place(x=10,y=500)
-            customtkinter.CTkLabel(master=suggest_frame,text="FinBot's Suggestion",font=("yu gothic ui", 25,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray20").place(x=20,y=20)
-            dataDisplayFrame = customtkinter.CTkFrame(master=suggest_frame,width=600,height=200,fg_color="gray90")
-            dataDisplayFrame.place(x=0,y=100)
+            suggest_frame = customtkinter.CTkFrame(master=home_frame, width=600, height=300, fg_color="gray90")
+            suggest_frame.place(x=10, y=500)
+            customtkinter.CTkLabel(master=suggest_frame, text="FinBot's Suggestion", font=("yu gothic ui", 25, "bold"),
+                                   fg_color="gray90", bg_color="gray90", text_color="gray20").place(x=20, y=20)
+            dataDisplayFrame = customtkinter.CTkFrame(master=suggest_frame, width=600, height=200, fg_color="gray90")
+            dataDisplayFrame.place(x=0, y=100)
 
             BotSuggestions = func.SuggestBest()
 
