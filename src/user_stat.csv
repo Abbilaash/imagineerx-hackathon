@@ -1,0 +1,7 @@
+TransactionId,Stock,PurchaseDate,SaleDate,PurchasePrice,SalePrice,Quantity,OwnershipPeriod,ProfitLoss,TransactionType
+1,BTC-USD,2023-01-01,2023-01-15,100,120,10,15,200,Sell
+2,BTC-USD,2023-02-01,,80,,20,,0,Buy
+3,BTC-USD,2023-03-01,2023-04-15,50,60,15,45,150,Sell
+4,BTC-USD,2023-04-01,2023-05-01,110,105,5,30,-25,Sell
+5,ETH-USD,2023-05-01,,90,,16,,0,Buy
+6,BTC-USD,2023-05-01,,90,,10,,0,Buy

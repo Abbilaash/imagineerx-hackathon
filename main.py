@@ -3,14 +3,13 @@ import customtkinter
 import tkinter as tk
 from tkinter import *
 from PIL import ImageTk, Image
-from tkinter import messagebox
-import mysql.connector 
 import os
-import test as func
 import pickle
 import pandas as pd
-import mplfinance as mpf
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg,NavigationToolbar2Tk
+import matplotlib.pyplot as plt
+import yfinance as yf
+import func
 
 window = customtkinter.CTk()
 window.geometry('1550x1000')
@@ -61,6 +60,81 @@ def App():
         top_line = Canvas(dashFrame, width=0, bg="MediumPurple1", highlightthickness=0)
         top_line.place(x=250,y=60,relheight=1)
 
+        # Create a function to view my account stat
+        def my_account_func():
+            myaccount_frame = customtkinter.CTkFrame(master=dashFrame,fg_color="white")
+            myaccount_frame.place(x=210,y=50,relheight=1,relwidth=1)
+
+            account_Details = customtkinter.CTkFrame(master=myaccount_frame,width=1200,fg_color="gray95",height=300)
+            account_Details.place(x=20,y=30)
+
+            customtkinter.CTkLabel(master=account_Details,text="Account Details",font=("yu gothic ui", 25,"bold"),fg_color="gray95",bg_color="gray95",text_color="gray20").place(x=20,y=20)
+            customtkinter.CTkLabel(master=account_Details,font=("yu gothic ui", 18,"bold"),text_color="gray25",text="Account Holder Name: "+USER_DET['NAME']).place(x=20,y=100)
+            customtkinter.CTkLabel(master=account_Details,font=("yu gothic ui", 18,"bold"),text_color="gray25",text="Demat Account Number: "+USER_DET['ACCNO']).place(x=20,y=130)
+            customtkinter.CTkLabel(master=account_Details,font=("yu gothic ui", 18,"bold"),text_color="gray25",text="Aadhaar Number: "+USER_DET['AADHAAR']).place(x=20,y=160)
+            customtkinter.CTkLabel(master=account_Details,font=("yu gothic ui", 18,"bold"),text_color="gray25",text="Gmail ID: "+USER_DET['GMAIL']).place(x=20,y=190)
+
+            transactionHistory_frame = customtkinter.CTkScrollableFrame(master=myaccount_frame,width=900,height=400,fg_color="gray95")
+            transactionHistory_frame.place(x=20,y=370)
+            StockHistory = func.Get_stock_history()[::-1]
+            for dat in StockHistory:
+                intFrame = customtkinter.CTkFrame(master=transactionHistory_frame,width=880,height=100,border_width=10,fg_color="gray70",border_color="gray95",corner_radius=25,bg_color="gray95")
+                intFrame.pack()
+                customtkinter.CTkLabel(master=intFrame,text="ID: "+dat[0],text_color="gray20",font=("yu gothic ui", 18,"bold")).place(x=20,y=30)
+                customtkinter.CTkLabel(master=intFrame,text=dat[1],text_color="gray20",font=("yu gothic ui", 18,"bold")).place(x=80,y=30)
+                customtkinter.CTkLabel(master=intFrame,text="Pruchased: "+dat[2],text_color="gray20",font=("yu gothic ui", 18,"bold")).place(x=200,y=30)
+                customtkinter.CTkLabel(master=intFrame,text="Quantity: "+dat[6],text_color="gray20",font=("yu gothic ui", 18,"bold")).place(x=420,y=30)
+                customtkinter.CTkLabel(master=intFrame,text="Type: "+dat[-1],text_color="gray20",font=("yu gothic ui", 18,"bold")).place(x=530,y=30)
+                if dat[3] != '':
+                    customtkinter.CTkLabel(master=intFrame,text="Sold: "+dat[3],text_color="gray20",font=("yu gothic ui", 18,"bold")).place(x=680,y=30)
+                else:
+                    customtkinter.CTkLabel(master=intFrame,text="Sold: -",text_color="gray20",font=("yu gothic ui", 18,"bold")).place(x=680,y=30)
+
+
+        # Designing the home screen
+        def home_func():
+            home_frame = customtkinter.CTkFrame(master=dashFrame,fg_color="white")
+            home_frame.place(x=210,y=50,relheight=1,relwidth=1)
+
+            graph_frame = customtkinter.CTkFrame(master=home_frame,fg_color="gray",width=800,height=600)
+            graph_frame.place(x=10,y=10)
+
+            df=yf.download(tickers= 'BTC-USD',start='2023-10-01', end='2024-02-11')
+            def graph_plot():            
+                fig, ax = plt.subplots(figsize=(16, 5))
+                open = df['Open']
+                close = df['Close']
+                high = df['High']
+                plot1 = fig.add_subplot()
+                plot1.plot(open,color="green")
+                plot1.plot(close,color="red")
+                plot1.plot(high,color="purple",linestyle='dashed')
+                plot1.legend(['Open price','Close price','Highest price'],loc="lower right")
+                ax.set_xlabel('Date')
+                ax.set_ylabel('Price ($)')
+                canvas = FigureCanvasTkAgg(fig,master = graph_frame)   
+                canvas_widget = canvas.get_tk_widget()
+                canvas_widget.pack(side=tk.TOP, fill=tk.BOTH) 
+                toolbar = NavigationToolbar2Tk(canvas, graph_frame) 
+                toolbar.update() 
+                canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+                graph_frame.grid_rowconfigure(0, weight=1)
+                graph_frame.grid_columnconfigure(0, weight=1)
+            graph_plot()
+
+            # builing the frame to display the predicted values
+            predicted_frame = customtkinter.CTkFrame(master=home_frame,width=400,height=300,fg_color="gray90")
+            predicted_frame.place(x=10,y=500)
+
+            # creating a frame for suggesting the user for more trades
+            suggest_frame = customtkinter.CTkFrame(master=home_frame,width=600,height=300,fg_color="gray90")
+            suggest_frame.place(x=450,y=500)
+
+            customtkinter.CTkLabel(master=suggest_frame,text="FinBot's Suggestion",font=("yu gothic ui", 25,"bold"),fg_color="gray95",bg_color="gray95",text_color="gray20").place(x=20,y=20)
+
+
+        home_func()
+
         dashboard_btn_img = customtkinter.CTkImage(Image.open(file_path + "/src/assets/dashboard_icon.png"),size=(20,20))
         dashboard_btn = customtkinter.CTkButton(master=SideOptions_frame,command=home_func,anchor="sw",hover_color="MediumPurple2",image=dashboard_btn_img,fg_color="white",compound="left",height=40,text_color="black",font=("yu gothic ui", 19,"bold"),text="  Home",corner_radius=8)
         dashboard_btn.place(x=5,y=60,relwidth=0.95)
@@ -69,49 +143,8 @@ def App():
         youraccount_btn = customtkinter.CTkButton(master=SideOptions_frame,command=my_account_func,anchor="sw",hover_color="MediumPurple2",image=youraccount_btn_img,fg_color="white",text_color="black",compound="left",height=40,font=("yu gothic ui", 19,"bold"),text="  My Account",corner_radius=8)
         youraccount_btn.place(x=5,y=120,relwidth=0.95)
 
-        # Create a function to view my account stat
-        def my_account_func():
-            pass
-
-        # Designing the home screen
-        def home_func():
-            home_frame = customtkinter.CTkFrame(master=dashFrame,fg_color="white")
-            home_frame.place(x=210,y=50,relheight=1,relwidth=1)
-
-            
-            data = pd.read_csv('src/bitcoin data.csv', parse_dates=True, index_col=0)
-            class CandlestickFrame(tk.Frame):
-                def __init__(self, master=None, **kwargs):
-                    super().__init__(master, **kwargs)
-                    self.master = master
-                    self.create_widgets()
-
-                def create_widgets(self):
-                    self.fig, self.ax = mpf.plot(data, type='candle', returnfig=True)
-                    self.canvas = FigureCanvasTkAgg(self.fig, master=self)
-                    self.canvas_widget = self.canvas.get_tk_widget()
-                    self.canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-                    toolbar = NavigationToolbar2Tk(self.canvas, self)
-                    toolbar.update()
-                    self.canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
-            candlestick_frame = CandlestickFrame(home_frame)
-            candlestick_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
-        home_func()
-
     # Creating the register account function
     def register_func():
-        '''data = {
-            'USERNAME':'abbi',
-            'NAME':'abbi',
-            'PASSWORD':'abbi',
-            'AADHAAR':'123456789011',
-            'PHONE':'8667093591',
-            'GMAIL':"abbilaashat@gmail.com"
-        }
-        with open("src/auth.bin", "wb") as file:
-            pickle.dump(data, file)'''
         pass
 
     def LogIn_func():
@@ -172,6 +205,7 @@ def App():
                 USER_DET['AADHAAR'] = data['AADHAAR']
                 USER_DET['PHONENUMBER'] = data['PHONE']
                 USER_DET['GMAIL'] = data['GMAIL']
+                USER_DET['ACCNO'] = data['ACCNO']
                 dashboard_func()
             else:
                 LogIn_func()
