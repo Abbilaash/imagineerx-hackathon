@@ -121,16 +121,28 @@ def App():
                 graph_frame.grid_rowconfigure(0, weight=1)
                 graph_frame.grid_columnconfigure(0, weight=1)
             graph_plot()
-
-            # builing the frame to display the predicted values
-            predicted_frame = customtkinter.CTkFrame(master=home_frame,width=400,height=300,fg_color="gray90")
-            predicted_frame.place(x=10,y=500)
+            
 
             # creating a frame for suggesting the user for more trades
             suggest_frame = customtkinter.CTkFrame(master=home_frame,width=600,height=300,fg_color="gray90")
-            suggest_frame.place(x=450,y=500)
+            suggest_frame.place(x=10,y=500)
+            customtkinter.CTkLabel(master=suggest_frame,text="FinBot's Suggestion",font=("yu gothic ui", 25,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray20").place(x=20,y=20)
+            dataDisplayFrame = customtkinter.CTkFrame(master=suggest_frame,width=600,height=200,fg_color="gray90")
+            dataDisplayFrame.place(x=0,y=100)
 
-            customtkinter.CTkLabel(master=suggest_frame,text="FinBot's Suggestion",font=("yu gothic ui", 25,"bold"),fg_color="gray95",bg_color="gray95",text_color="gray20").place(x=20,y=20)
+            BotSuggestions = func.SuggestBest()
+
+            sell1 = "DATE:"+str(func.convert_Date(BotSuggestions[0][0][0]))+"    "+"ACTION: BUY"+"      "+"PRED PRICE:"+str(BotSuggestions[0][0][1])
+            sell2 = "DATE:"+str(func.convert_Date(BotSuggestions[0][1][1]))+"    "+"ACTION: BUY"+"      "+"PRED PRICE:"+str(BotSuggestions[0][1][1])
+            buy1 = "DATE:"+str(func.convert_Date(BotSuggestions[1][0][0]))+"    "+"ACTION: SELL"+"      "+"PRED PRICE:"+str(BotSuggestions[1][0][1])
+            buy2 = "DATE:"+str(func.convert_Date(BotSuggestions[1][1][1]))+"    "+"ACTION: SELL"+"      "+"PRED PRICE:"+str(BotSuggestions[1][1][1])
+
+            customtkinter.CTkLabel(master=suggest_frame,text="According to the previous prices I can suggest to",font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=60)
+            customtkinter.CTkLabel(master=dataDisplayFrame,text=sell1,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=10)
+            customtkinter.CTkLabel(master=dataDisplayFrame,text=sell2,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=40)
+            customtkinter.CTkLabel(master=dataDisplayFrame,text=buy1,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=70)
+            customtkinter.CTkLabel(master=dataDisplayFrame,text=buy2,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=100)
+            
 
 
         home_func()
