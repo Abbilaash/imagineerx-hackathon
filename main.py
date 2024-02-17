@@ -111,6 +111,7 @@ def App():
                 plot1.legend(['Open price','Close price','Highest price'],loc="lower right")
                 ax.set_xlabel('Date')
                 ax.set_ylabel('Price ($)')
+                ax.set_title('Bitcoin price vs Date',fontsize=17)
                 canvas = FigureCanvasTkAgg(fig,master = graph_frame)   
                 canvas_widget = canvas.get_tk_widget()
                 canvas_widget.pack(side=tk.TOP, fill=tk.BOTH) 
@@ -141,8 +142,19 @@ def App():
             customtkinter.CTkLabel(master=dataDisplayFrame,text=sell2,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=40)
             customtkinter.CTkLabel(master=dataDisplayFrame,text=buy1,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=70)
             customtkinter.CTkLabel(master=dataDisplayFrame,text=buy2,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=100)
-            
 
+
+            sell1 = "DATE:"+str(func.convert_Date(BotSuggestions[0][0][0]))+"    "+"ACTION: BUY"+"      "+"PRED PRICE:"+str(BotSuggestions[0][0][1])
+            sell2 = "DATE:"+str(func.convert_Date(BotSuggestions[0][1][1]))+"    "+"ACTION: BUY"+"      "+"PRED PRICE:"+str(BotSuggestions[0][1][1])
+            buy1 = "DATE:"+str(func.convert_Date(BotSuggestions[1][0][0]))+"    "+"ACTION: SELL"+"      "+"PRED PRICE:"+str(BotSuggestions[1][0][1])
+            buy2 = "DATE:"+str(func.convert_Date(BotSuggestions[1][1][1]))+"    "+"ACTION: SELL"+"      "+"PRED PRICE:"+str(BotSuggestions[1][1][1])
+
+            customtkinter.CTkLabel(master=suggest_frame,text="According to the previous prices I can suggest to",font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=60)
+            customtkinter.CTkLabel(master=dataDisplayFrame,text=sell1,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=10)
+            customtkinter.CTkLabel(master=dataDisplayFrame,text=sell2,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=40)
+            customtkinter.CTkLabel(master=dataDisplayFrame,text=buy1,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=70)
+            customtkinter.CTkLabel(master=dataDisplayFrame,text=buy2,font=("yu gothic ui", 17,"bold"),fg_color="gray90",bg_color="gray90",text_color="gray25").place(x=20,y=100)
+            
 
         home_func()
 
@@ -159,51 +171,7 @@ def App():
         pass
 
     def LogIn_func():
-        login_frame = customtkinter.CTkFrame(master=window,fg_color="white")
-        login_frame.place(x=0,y=0,relheight=1,relwidth=1)
-        img1=ImageTk.PhotoImage(Image.open("A:\\PROJECTS\\Coimbatore-smart-city-app\\Smart-city-app\\assets\\pattern.png"))
-        l1=customtkinter.CTkLabel(master=login_frame,image=img1)
-        l1.pack()
-        frame=customtkinter.CTkFrame(master=l1, width=320, height=360, corner_radius=15,bg_color='black')
-        frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        l2=customtkinter.CTkLabel(master=frame, text="Log into your Kovai smart \ncitizen app",font=('Century Gothic',20))
-        l2.place(x=40, y=30)
-        entry1=customtkinter.CTkEntry(master=frame, width=220,height=40, placeholder_text='Username')
-        entry1.place(x=50, y=110)
-        entry2=customtkinter.CTkEntry(master=frame, width=220,height=40, placeholder_text='Password', show="*")
-        entry2.place(x=50, y=165)
-
-        def login_btn():
-            username = entry1.get()
-            password = entry2.get()
-            try:
-                data = func.retreive_user_data(username,password)
-                file = open('src/auth.bin','wb')
-                dat = {
-                    'USERNAME':data[0],
-                    'NAME':data[1],
-                    'PASSWORD':data[2],
-                    'AADHAAR':data[3],
-                    'PHONENUMBER':data[4],
-                    'GMAIL':data[5]
-                }
-                with open("src/auth.bin", "wb") as file:
-                    pickle.dump(dat, file)
-                USER_DET["USERNAME"] = data[0]
-                USER_DET["NAME"] = data[1]
-                USER_DET['AADHAAR'] = data[3]
-                USER_DET['PHONENUMBER'] = data[4]
-                USER_DET['GMAIL'] = data[5]
-                login_frame.destroy()
-                dashboard_func()
-            except:
-                data = ()
-                l5=customtkinter.CTkLabel(master=frame, text="No credentials found!",font=('Century Gothic',14))
-                l5.place(x=85, y=320)
-            if len(data)>0:
-                print(data)
-        button1 = customtkinter.CTkButton(master=frame, width=220,height=50, text="LOGIN", command=login_btn, corner_radius=6)
-        button1.place(x=50, y=260)
+        pass
     
     # here the data will be stored at 'auth.bin' and the uder details will be fed at UDER_DET
     def LogIn():
