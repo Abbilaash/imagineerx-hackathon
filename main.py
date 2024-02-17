@@ -99,27 +99,29 @@ def App():
             graph_frame.place(x=10,y=10)
 
             df=yf.download(tickers= 'BTC-USD',start='2023-10-01', end='2024-02-11')
-            def graph_plot():            
+
+            def graph_plot():
                 fig, ax = plt.subplots(figsize=(16, 5))
                 open = df['Open']
                 close = df['Close']
                 high = df['High']
                 plot1 = fig.add_subplot()
-                plot1.plot(open,color="green")
-                plot1.plot(close,color="red")
-                plot1.plot(high,color="purple",linestyle='dashed')
-                plot1.legend(['Open price','Close price','Highest price'],loc="lower right")
+                plot1.plot(open, color="green")
+                plot1.plot(close, color="red")
+                plot1.plot(high, color="purple", linestyle='dashed')
+                plot1.legend(['Open price', 'Close price', 'Highest price'], loc="lower right")
                 ax.set_xlabel('Date')
                 ax.set_ylabel('Price ($)')
-                ax.set_title('Bitcoin price vs Date',fontsize=17)
-                canvas = FigureCanvasTkAgg(fig,master = graph_frame)   
+                ax.set_title('Bitcoin price vs Date', fontsize=17)
+                canvas = FigureCanvasTkAgg(fig, master=graph_frame)
                 canvas_widget = canvas.get_tk_widget()
-                canvas_widget.pack(side=tk.TOP, fill=tk.BOTH) 
-                toolbar = NavigationToolbar2Tk(canvas, graph_frame) 
-                toolbar.update() 
+                canvas_widget.pack(side=tk.TOP, fill=tk.BOTH)
+                toolbar = NavigationToolbar2Tk(canvas, graph_frame)
+                toolbar.update()
                 canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
                 graph_frame.grid_rowconfigure(0, weight=1)
                 graph_frame.grid_columnconfigure(0, weight=1)
+
             graph_plot()
 
             # creating a frame for suggesting the user for more trades
